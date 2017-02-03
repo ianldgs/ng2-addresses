@@ -7,9 +7,9 @@ import { Address } from './address';
   template: `
     <div>
       <i>icon</i> 
-      <h3>{{address.name}}</h3>
-      <p>{{address.street}}, {{address.number}} - {{address.district}}</p>
-      <p>{{address.zip}}</p>
+      <h3>{{address.label}}</h3>
+      <p>{{address.address}}, {{address.number}} - {{address.neighborhood}}</p>
+      <p>{{address.zipCode}}</p>
     </div>
   `
 })

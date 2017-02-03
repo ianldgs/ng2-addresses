@@ -3,18 +3,18 @@ import { Address } from './address';
 export const ADDRESSES: Address[] = [
   {
     id: 1,
-    name: 'Teste',
-    street: 'Rua teste',
+    label: 'Teste',
+    address: 'Rua teste',
     number: 1337,
-    district: 'B. teste',
-    zip: '31337-666',
+    neighborhood: 'B. teste',
+    zipCode: '31337-666',
   },
   {
     id: 2,
-    name: 'Teste2',
-    street: 'Rua teste',
+    label: 'Teste2',
+    address: 'Rua teste',
     number: 1338,
-    district: 'B. teste',
-    zip: '31337-666',
+    neighborhood: 'B. teste',
+    zipCode: '31337-666',
   },
 ];
