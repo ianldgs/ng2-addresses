@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { UserService } from './user.service';
 
 @Component({
-  providers: [UserService],
   selector: 'login-form',
   template: `
     <form name="login" (ngSubmit)="tryToLogin()">
@@ -27,11 +27,17 @@ import { UserService } from './user.service';
     //templateUrl: './name.component.html',
     //styleUrls: ['./name.component.css']
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
   email: string;
   password: string;
 
-  constructor(private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService) { }
+
+  ngOnInit() {
+    if (this.userService.isLogged()) {
+      this.router.navigateByUrl('address');
+    }
+  }
 
   tryToLogin() {
     this.userService
