@@ -1,8 +1,14 @@
 export class Address {
   id: number;
-  name: string;
-  street: string;
-  number: number;
-  district: string;
-  zip: string;
+  label: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  zipCode: string;
+  state: string;
+  complement: string;
+  address: string;
+  neighborhood: string;
+  number: string;
+  country: string;
 }
