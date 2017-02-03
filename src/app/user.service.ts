@@ -14,7 +14,7 @@ export class UserService extends BaseService {
     return !!localStorage.getItem('access_token');
   }
 
-  login(email: string, password: string): Promise {
+  login(email: string, password: string): Promise<any> {
     const headers = new Headers();
     //headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Basic ZTZiZGVjY2ItNzM1OC00OTk3LWIzYzAtODk2NDBhZjEyZGRlOmQ5OWNmMTU0LTFjZGYtNDRiMi04MDJmLWU1YzhiYmU5NjY5OA==');
