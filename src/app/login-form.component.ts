@@ -43,9 +43,9 @@ export class LoginFormComponent implements OnInit {
     this.userService
       .login(this.email, this.password)
       .then(() => {
-          alert('Logou');
+        this.router.navigateByUrl('address');
       }, () => {
-          alert('Deu ruim');
+        alert('Deu ruim');
       });
   }
 }
