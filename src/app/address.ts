@@ -1,5 +1,5 @@
 export class Address {
-  id: number;
+  id?: number;
   label: string;
   latitude: number;
   longitude: number;
@@ -9,6 +9,6 @@ export class Address {
   complement: string;
   address: string;
   neighborhood: string;
-  number: string;
+  number: number;
   country: string;
 }

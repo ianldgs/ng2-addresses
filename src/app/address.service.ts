@@ -14,7 +14,7 @@ export class AddressService extends BaseService {
     super();
   }
 
-  getAddresses(): Promise<Address[]> {
+  all(): Promise<Address[]> {
     const headers = new Headers();
     headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
 
@@ -22,5 +22,42 @@ export class AddressService extends BaseService {
       .get(this.url, { headers })
       .toPromise()
       .then(res => res.json().data as Address[]);
+  }
+
+  get(id: number): Promise<Address> {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+
+    return this.http
+      .get(this.url + '/' + id, { headers })
+      .toPromise()
+      .then(res => res.json() as Address);
+  }
+
+  save(address: Address): Promise<any> {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    headers.append('Content-Type', 'application/json');
+
+    return this.http
+      .request(this.url, { headers, method: address.id ? 'PUT' : 'POST', body: address })
+      .toPromise()
+      .then(res => res.json());
+  }
+
+  delete(address: Address | number): Promise<any> {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+
+    let id;
+    if (address instanceof Address) {
+      id = address.id;
+    } else {
+      id = address;
+    }
+
+    return this.http
+      .delete(this.url + '/' + id, { headers })
+      .toPromise();
   }
 }
