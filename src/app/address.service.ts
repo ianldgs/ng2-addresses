@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+
+import { BaseService, BASE_API_URL, BASE_API_PATH } from './base.service';
 
 import { Address } from './address';
-import { ADDRESSES } from './mock-addresses'
 
 @Injectable()
-export class AddressService {
-  constructor() { }
+export class AddressService extends BaseService {
+  url = BASE_API_URL + BASE_API_PATH + '/address';
 
-  getAddresses(): Promise<Address[]> {
-    return Promise.resolve(ADDRESSES);
+  constructor(private http: Http) {
+    super();
   }
 
-  getAddressesSlowly(): Promise<Address[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.getAddresses()), 2000);
-    });
+  getAddresses(): Promise<Address[]> {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+
+    return this.http
+      .get(this.url, { headers })
+      .toPromise()
+      .then(res => res.json().data as Address[]);
   }
 }

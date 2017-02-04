@@ -32,6 +32,6 @@ export class AddressListComponent implements OnInit {
   }
 
   getAddresses(): void {
-    this.addressService.getAddressesSlowly().then(addresses => this.addresses = addresses);
+    this.addressService.getAddresses().then(addresses => this.addresses = addresses);
   }
 }
