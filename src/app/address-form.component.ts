@@ -41,7 +41,7 @@ import { Address } from './address';
       <label for="txtLongitude">Longitude</label>
       <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="text">
 
-      <button type="submit" [disabled]="!heroForm.form.valid">Submit</button>
+      <button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
       <button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
 
       <!--div class="form-group">
