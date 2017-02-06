@@ -39,8 +39,10 @@ export class AddressService extends BaseService {
     headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
     headers.append('Content-Type', 'application/json');
 
+    address.availableItems = address.availableItems || [];
+
     return this.http
-      .request(this.url, { headers, method: address.id ? 'PUT' : 'POST', body: address })
+      .request(this.url + '/' + address.id, { headers, method: address.id ? 'PUT' : 'POST', body: address })
       .toPromise()
       .then(res => res.json());
   }

@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
 
+import 'rxjs/add/operator/switchMap';
+
+import { AddressService } from './address.service';
 import { Address } from './address';
 
 @Component({
@@ -12,7 +17,7 @@ import { Address } from './address';
       <input id="txtLabel" name="label" [(ngModel)]="address.label" type="text">
 
       <label for="txtZipCode">CEP</label>
-      <input id="txtZipCode" name="zipCode" [(ngModel)]="address.zipCode" type="text">
+      <input id="txtZipCode" name="zipCode" [(ngModel)]="address.zipCode" type="number">
 
       <label for="txtCountry">País</label>
       <input id="txtCountry" name="country" [(ngModel)]="address.country" type="text">
@@ -30,16 +35,16 @@ import { Address } from './address';
       <input id="txtAddress" name="address" [(ngModel)]="address.address" type="text">
 
       <label for="txtNumber">Número</label>
-      <input id="txtNumber" name="number" [(ngModel)]="address.number" type="text">
+      <input id="txtNumber" name="number" [(ngModel)]="address.number" type="number">
 
       <label for="txtComplement">Complemento</label>
       <input id="txtComplement" name="complement" [(ngModel)]="address.complement" type="text"> 
 
       <label for="txtLatitude">Latitude</label>
-      <input id="txtLatitude" name="latitude" [(ngModel)]="address.latitude" type="text">
+      <input id="txtLatitude" name="latitude" [(ngModel)]="address.latitude" type="number">
 
       <label for="txtLongitude">Longitude</label>
-      <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="text">
+      <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="number">
 
       <button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
       <button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
@@ -77,18 +82,46 @@ import { Address } from './address';
   `,
   styles: ['']
 })
-export class AddressFormComponent {
+export class AddressFormComponent implements OnInit {
   address: Address;
 
-  constructor() {
-    this.newAddress();
-  }
+  constructor(
+    private addressService: AddressService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+  ) { }
 
   newAddress() {
     this.address = new Address();
   }
 
-  onSubmit() {
+  ngOnInit() {
+    this.newAddress();
 
+    this.route.params
+      .switchMap((params: Params) => {
+        if (params['id']) {
+          return this.addressService.get(+params['id']);
+        } else {
+          return Promise.resolve(new Address());
+        }
+      })
+      .subscribe((address: Address) => {
+        console.log(address);
+        this.address = address;
+      }, () => {
+        alert('Erro desconhecido');
+      });
+  }
+
+  onSubmit() {
+    this.addressService
+      .save(this.address)
+      .then(res => {
+        this.router.navigate(['address']);
+      }, () => {
+        alert('Erro desconhecido');
+      });
   }
 }

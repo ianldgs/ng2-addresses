@@ -33,6 +33,10 @@ import { AddressService } from './address.service';
         path: 'address',
         component: AddressListComponent
       },
+      {
+        path: 'address/:id/edit',
+        component: AddressFormComponent
+      },
     ]),
   ],
   providers:    [ AddressService, UserService ],
