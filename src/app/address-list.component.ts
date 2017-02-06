@@ -9,6 +9,7 @@ import { Address } from './address';
   selector: 'address-list',
   template: `
     <h2>Endereços</h2>
+    <address-form></address-form>
     <span *ngIf="!addresses">Carregando...</span>
     <ul *ngIf="addresses">
       <li *ngFor="let address of addresses">

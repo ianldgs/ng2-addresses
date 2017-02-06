@@ -7,8 +7,9 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { LoginFormComponent } from './login-form.component';
-import { AddressListComponent } from './address-list.component';
 import { AddressComponent } from './address.component';
+import { AddressListComponent } from './address-list.component';
+import { AddressFormComponent } from './address-form.component';
 
 import { UserService } from './user.service';
 import { AddressService } from './address.service';
@@ -35,7 +36,7 @@ import { AddressService } from './address.service';
     ]),
   ],
   providers:    [ AddressService, UserService ],
-  declarations: [ AppComponent, LoginFormComponent, AddressListComponent, AddressComponent ],
+  declarations: [ AppComponent, LoginFormComponent, AddressComponent, AddressListComponent, AddressFormComponent ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
