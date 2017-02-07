@@ -52,6 +52,22 @@ export class AddressService extends BaseService {
       .then(res => res.json());
   }
 
+  preDelete(address: Address | number) {
+    let id: number;
+    if (address instanceof Address) {
+      id = address.id;
+    } else {
+      id = address;
+    }
+
+    let _addresses = this.addresses.filter(address => id != address.id);
+    this.addresses.length = 0;
+
+    _addresses.forEach(address => {
+      this.addresses.push(address);
+    });
+  }
+
   delete(address: Address | number): Promise<any> {
     const headers = new Headers();
     headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
@@ -69,7 +85,7 @@ export class AddressService extends BaseService {
   }
 
   update(): Promise<Address[]> {
-    return this.all().then((addresses: Address[]) => {
+    return this.all().then((addresses: Address[] = []) => {
       this.addresses.length = 0;
       addresses.reverse().forEach(address => {
         this.addresses.push(address);

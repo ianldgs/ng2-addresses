@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { MdSnackBar } from '@angular/material';
 
 import { AddressService } from './address.service';
 import { Address } from './address';
@@ -26,17 +27,37 @@ export class AddressComponent {
   @Input()
   address: Address;
 
-  constructor(private addressService: AddressService) { }
+  constructor(private addressService: AddressService, private snackBar: MdSnackBar) { }
 
   delete(id: number) {
-    if (confirm('Deseja mesmo apagar esse endereço?')) {
-      this.addressService
-        .delete(id)
-        .then(() => {
-          this.addressService.update();
-        }, () => {
-          alert('Erro desconhecido');
-        });
-    }
+    this.addressService.preDelete(id);
+
+    const snackbar = this.snackBar.open('Excluído.', 'Desfazer', {
+      duration: 2000,
+    });
+
+    let cancelled = false;
+    snackbar
+      .onAction()
+      .toPromise()
+      .then(() => {
+        cancelled = true;
+        this.addressService.update();
+      });
+
+    snackbar
+      .afterDismissed()
+      .toPromise()
+      .then(() => {
+        if (!cancelled) {
+          this.addressService
+            .delete(id)
+            .then(() => {
+              this.addressService.update();
+            }, () => {
+              this.snackBar.open('Erro desconhecido.');
+            });
+        }
+      });
   }
 }

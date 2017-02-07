@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
+import { MdSnackBar } from '@angular/material';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -10,44 +11,67 @@ import { Address } from './address';
 @Component({
   selector: 'address-form',
   template: `
+    <md-card><md-card-content>
     <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
       <input name="id" [(ngModel)]="address.id" type="hidden">
 
-      <label for="txtLabel">Nome</label>
-      <input id="txtLabel" name="label" [(ngModel)]="address.label" type="text">
+      <!--label for="txtLabel">Nome</label-->
+      <md-input-container>
+        <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
+      </md-input-container>
 
-      <label for="txtZipCode">CEP</label>
-      <input id="txtZipCode" name="zipCode" [(ngModel)]="address.zipCode" type="number">
+      <!--label for="txtZipCode">CEP</label-->
+      <md-input-container>
+        <input md-input id="txtZipCode" name="zipCode" placeholder="CEP" [(ngModel)]="address.zipCode" type="number">
+      </md-input-container>
 
-      <label for="txtCountry">País</label>
-      <input id="txtCountry" name="country" [(ngModel)]="address.country" type="text">
+      <!--label for="txtCountry">País</label-->
+      <md-input-container>
+        <input md-input id="txtCountry" name="country" placeholder="País" [(ngModel)]="address.country" type="text">
+      </md-input-container>
 
-      <label for="txtState">Estado</label>
-      <input id="txtState" name="state" [(ngModel)]="address.state" type="text">
+      <!--label for="txtState">Estado</label-->
+      <md-input-container>
+        <input md-input id="txtState" name="state" placeholder="Estado" [(ngModel)]="address.state" type="text">
+      </md-input-container>
 
-      <label for="txtCity">Cidade</label>
-      <input id="txtCity" name="city" [(ngModel)]="address.city" type="text">
+      <!--label for="txtCity">Cidade</label-->
+      <md-input-container>
+        <input md-input id="txtCity" name="city" placeholder="Cidade" [(ngModel)]="address.city" type="text">
+      </md-input-container>
 
-      <label for="txtNeighborhood">Bairro</label>
-      <input id="txtNeighborhood" name="neighborhood" [(ngModel)]="address.neighborhood" type="text">
+      <!--label for="txtNeighborhood">Bairro</label-->
+      <md-input-container>
+        <input md-input id="txtNeighborhood" name="neighborhood" placeholder="Bairro" [(ngModel)]="address.neighborhood" type="text">
+      </md-input-container>
 
-      <label for="txtAddress">Rua</label>
-      <input id="txtAddress" name="address" [(ngModel)]="address.address" type="text">
+      <!--label for="txtAddress">Rua</label-->
+      <md-input-container>
+        <input md-input id="txtAddress" name="address" placeholder="Rua" [(ngModel)]="address.address" type="text">
+      </md-input-container>
 
-      <label for="txtNumber">Número</label>
-      <input id="txtNumber" name="number" [(ngModel)]="address.number" type="number">
+      <!--label for="txtNumber">Número</label-->
+      <md-input-container>
+        <input md-input id="txtNumber" name="number" placeholder="Número" [(ngModel)]="address.number" type="number">
+      </md-input-container>
 
-      <label for="txtComplement">Complemento</label>
-      <input id="txtComplement" name="complement" [(ngModel)]="address.complement" type="text"> 
+      <!--label for="txtComplement">Complemento</label-->
+      <md-input-container>
+        <input md-input id="txtComplement" name="complement" placeholder="Complemento" [(ngModel)]="address.complement" type="text"> 
+      </md-input-container>
 
-      <label for="txtLatitude">Latitude</label>
-      <input id="txtLatitude" name="latitude" [(ngModel)]="address.latitude" type="number" max="90" min="-90">
+      <!--label for="txtLatitude">Latitude</label-->
+      <md-input-container>
+        <input md-input id="txtLatitude" name="latitude" placeholder="Latitude" [(ngModel)]="address.latitude" type="number" max="90" min="-90">
+      </md-input-container>
 
-      <label for="txtLongitude">Longitude</label>
-      <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="number" max="180" min="-180">
+      <!--label for="txtLongitude">Longitude</label-->
+      <md-input-container>
+        <input md-input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="number" max="180" min="-180">
+      </md-input-container>
 
-      <button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
-      <button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
+      <button md-button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
+      <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
 
       <!--div class="form-group">
         <label for="name">Name</label>
@@ -79,6 +103,7 @@ import { Address } from './address';
       </div-->
       
     </form>
+    </md-card-content></md-card>
   `,
   styles: ['']
 })
@@ -89,7 +114,8 @@ export class AddressFormComponent implements OnInit {
     private addressService: AddressService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private snackBar: MdSnackBar
   ) { }
 
   newAddress() {
@@ -108,10 +134,11 @@ export class AddressFormComponent implements OnInit {
         }
       })
       .subscribe((address: Address) => {
-        console.log(address);
         this.address = address;
       }, () => {
-        alert('Erro desconhecido');
+        this.snackBar.open('Erro desconhecido', null, {
+          duration: 2000,
+        });
       });
   }
 
@@ -119,6 +146,10 @@ export class AddressFormComponent implements OnInit {
     this.addressService
       .save(this.address)
       .then(res => {
+        this.snackBar.open('Salvo.', null, {
+          duration: 2000,
+        });
+
         if ('/address' === this.router.url) {
           this.newAddress();
           this.addressService.update();
@@ -126,7 +157,9 @@ export class AddressFormComponent implements OnInit {
           this.router.navigateByUrl('address');
         }       
       }, () => {
-        alert('Erro desconhecido');
+        this.snackBar.open('Erro desconhecido', null, {
+          duration: 2000,
+        });
       });
   }
 }
