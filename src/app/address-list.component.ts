@@ -10,12 +10,13 @@ import { Address } from './address';
   template: `
     <h2>Endereços</h2>
     <address-form></address-form>
-    <span *ngIf="!addresses">Carregando...</span>
+    <p *ngIf="!addresses">Carregando...</p>
     <ul *ngIf="addresses">
       <li *ngFor="let address of addresses">
         <address [address]="address"></address>
       </li>
     </ul>
+    <p *ngIf="addresses && !addresses.length">Nenhum endereço encontrado</p>
   `,
   styles: ['']
 })
