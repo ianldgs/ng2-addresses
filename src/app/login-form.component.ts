@@ -6,10 +6,10 @@ import { UserService } from './user.service';
 @Component({
   selector: 'login-form',
   template: `
-    <form name="login" (ngSubmit)="tryToLogin()" #loginForm="ngForm">
-      <md-grid-list cols="1" rowHeight="100px">
-        <md-grid-tile>
-          <md-input-container>
+    <form name="login" (ngSubmit)="tryToLogin()" #loginForm="ngForm" style="margin-top: 50px;">
+      <div class="col-xs">
+        <div class="row center-xs">
+          <md-input-container class="col-xs-8 col-sm-6 col-md-4">
             <input 
               md-input
               placeholder="email" 
@@ -19,7 +19,9 @@ import { UserService } from './user.service';
               [(ngModel)]="email"
             >
           </md-input-container>
-          <md-input-container>
+        </div>
+        <div class="row center-xs">
+          <md-input-container class="col-xs-8 col-sm-6 col-md-4">
             <input 
               md-input
               placeholder="senha" 
@@ -29,9 +31,13 @@ import { UserService } from './user.service';
               [(ngModel)]="password"
             >
           </md-input-container>
-          <button md-raised-button type="submit" [disabled]="!loginForm.form.valid">Entrar</button>
-        </md-grid-tile>
-      </md-grid-list>
+        </div>
+        <div class="row center-xs">
+          <div class="col-xs-8 col-sm-6 col-md-4" style="text-align: left;">
+            <button md-raised-button type="submit" [disabled]="!loginForm.form.valid">Entrar</button>
+          </div>
+        </div>
+      </div>
     </form>
     `
     //templateUrl: './name.component.html',
