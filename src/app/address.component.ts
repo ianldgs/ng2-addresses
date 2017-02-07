@@ -28,7 +28,9 @@ import { Address } from './address';
         <ng2-map 
           center="{{address.latitude}},{{address.longitude}}"
           style="height: 220px"
-        ></ng2-map>
+        >
+          <marker position="{{address.latitude}},{{address.longitude}}"></marker>
+        </ng2-map>
       </md-card-content>
     </md-card>
   `
