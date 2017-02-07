@@ -12,6 +12,7 @@ import { Address } from './address';
         <md-icon md-card-avatar class="example-header-image">place</md-icon>
         <md-card-title>{{address.label}}</md-card-title>
         <md-card-subtitle>{{address.address}}, {{address.number}} - {{address.neighborhood}}</md-card-subtitle>
+        <span class="app-toolbar-filler"></span>
         <button md-icon-button [mdMenuTriggerFor]="menu">
           <md-icon>more_vert</md-icon>
         </button>
