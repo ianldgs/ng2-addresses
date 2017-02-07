@@ -11,67 +11,66 @@ import { Address } from './address';
 @Component({
   selector: 'address-form',
   template: `
-    <md-card><md-card-content>
+    <md-card>
+    <md-card-content>
+    <ng2-map 
+      *ngIf="address.latitude && address.longitude" 
+      center="{{address.latitude}},{{address.longitude}}"
+      style="padding-bottom: 20px;"
+    ></ng2-map>
     <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
       <input name="id" [(ngModel)]="address.id" type="hidden">
-
-      <!--label for="txtLabel">Nome</label-->
       <md-input-container>
         <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
       </md-input-container>
 
-      <!--label for="txtZipCode">CEP</label-->
       <md-input-container>
-        <input md-input id="txtZipCode" name="zipCode" placeholder="CEP" [(ngModel)]="address.zipCode" type="number">
+        <input 
+          md-input 
+          id="txtZipCode" 
+          name="zipCode" 
+          placeholder="CEP" 
+          [(ngModel)]="address.zipCode" 
+          type="number"
+          min="10000000"
+          max="99999999"
+          (ngModelChange)="address.zipCode && address.zipCode > 10000000 && googleByZipCode()"
+        >
       </md-input-container>
 
-      <!--label for="txtCountry">País</label-->
       <md-input-container>
         <input md-input id="txtCountry" name="country" placeholder="País" [(ngModel)]="address.country" type="text">
       </md-input-container>
 
-      <!--label for="txtState">Estado</label-->
       <md-input-container>
         <input md-input id="txtState" name="state" placeholder="Estado" [(ngModel)]="address.state" type="text">
       </md-input-container>
 
-      <!--label for="txtCity">Cidade</label-->
       <md-input-container>
         <input md-input id="txtCity" name="city" placeholder="Cidade" [(ngModel)]="address.city" type="text">
       </md-input-container>
 
-      <!--label for="txtNeighborhood">Bairro</label-->
       <md-input-container>
         <input md-input id="txtNeighborhood" name="neighborhood" placeholder="Bairro" [(ngModel)]="address.neighborhood" type="text">
       </md-input-container>
 
-      <!--label for="txtAddress">Rua</label-->
       <md-input-container>
         <input md-input id="txtAddress" name="address" placeholder="Rua" [(ngModel)]="address.address" type="text">
       </md-input-container>
 
-      <!--label for="txtNumber">Número</label-->
       <md-input-container>
         <input md-input id="txtNumber" name="number" placeholder="Número" [(ngModel)]="address.number" type="number">
       </md-input-container>
 
-      <!--label for="txtComplement">Complemento</label-->
       <md-input-container>
         <input md-input id="txtComplement" name="complement" placeholder="Complemento" [(ngModel)]="address.complement" type="text"> 
       </md-input-container>
 
-      <!--label for="txtLatitude">Latitude</label-->
-      <md-input-container>
-        <input md-input id="txtLatitude" name="latitude" placeholder="Latitude" [(ngModel)]="address.latitude" type="number" max="90" min="-90">
-      </md-input-container>
+      <input id="txtLatitude" name="latitude" placeholder="Latitude" [(ngModel)]="address.latitude" type="hidden">
+      <input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="hidden">
 
-      <!--label for="txtLongitude">Longitude</label-->
-      <md-input-container>
-        <input md-input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="number" max="180" min="-180">
-      </md-input-container>
-
-      <button md-button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
-      <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
+      <button *ngIf="!address.id" md-button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
+      <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
 
       <!--div class="form-group">
         <label for="name">Name</label>
@@ -103,7 +102,8 @@ import { Address } from './address';
       </div-->
       
     </form>
-    </md-card-content></md-card>
+    </md-card-content>
+    </md-card>
   `,
   styles: ['']
 })
@@ -160,6 +160,19 @@ export class AddressFormComponent implements OnInit {
         this.snackBar.open('Erro desconhecido', null, {
           duration: 2000,
         });
+      });
+  }
+
+  googleByZipCode() {
+    this.addressService
+      .googleByZipCode(this.address.zipCode)
+      .then(address => {
+        this.address.country = address.country;
+        this.address.state = address.state;
+        this.address.city = address.city;
+        this.address.neighborhood = address.neighborhood;
+        this.address.latitude = address.latitude;
+        this.address.longitude = address.longitude;
       });
   }
 }

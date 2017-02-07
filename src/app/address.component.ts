@@ -7,20 +7,31 @@ import { Address } from './address';
 @Component({
   selector: 'address',
   template: `
-    <div>
-      <i>icon</i> 
-      <h3>{{address.label}}</h3>
-      <p>{{address.address}}, {{address.number}} - {{address.neighborhood}}</p>
-      <p>{{address.zipCode}}</p>
-      <ul>
-        <li>
-          <a routerLink="/address/{{address.id}}/edit">Editar</a>
-        </li>
-        <li>
-          <button type="button" (click)="delete(address.id)">Apagar</button>
-        </li>
-      </ul>
-    </div>
+    <md-card style="width: 100%;">
+      <md-card-header>
+        <md-icon md-card-avatar class="example-header-image">place</md-icon>
+        <md-card-title>{{address.label}}</md-card-title>
+        <md-card-subtitle>{{address.address}}, {{address.number}} - {{address.neighborhood}}</md-card-subtitle>
+        <button md-icon-button [mdMenuTriggerFor]="menu">
+          <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu">
+          <a md-menu-item routerLink="/address/{{address.id}}/edit">
+            <span>Editar</span>
+          </a>
+          <button md-menu-item (click)="delete(address.id)">
+            <span>Remover</span>
+          </button>
+        </md-menu>
+      </md-card-header>
+      <md-card-content>
+        <ng2-map 
+          *ngIf="address.latitude && address.longitude" 
+          center="{{address.latitude}},{{address.longitude}}"
+          style="height: 220px"
+        ></ng2-map>
+      </md-card-content>
+    </md-card>
   `
 })
 export class AddressComponent {

@@ -5,6 +5,7 @@ import { MaterialModule } from '@angular/material';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Ng2MapModule } from 'ng2-map';
 
 import { AppComponent }  from './app.component';
 import { LoginFormComponent } from './login-form.component';
@@ -16,10 +17,11 @@ import { UserService } from './user.service';
 import { AddressService } from './address.service';
 
 @NgModule({
-  imports:      [ 
+  imports: [ 
     BrowserModule, 
     FormsModule, 
     HttpModule,
+    Ng2MapModule,
     MaterialModule.forRoot(),
     RouterModule.forRoot([
       {
