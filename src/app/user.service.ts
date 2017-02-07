@@ -11,7 +11,7 @@ export class UserService extends BaseService {
   }
 
   isLogged(): boolean {
-    return !!localStorage.getItem('access_token');
+    return !!sessionStorage.getItem('access_token');
   }
 
   login(email: string, password: string): Promise<any> {
@@ -28,11 +28,11 @@ export class UserService extends BaseService {
       .toPromise()
       .then(res => res.json())
       .then(res => {
-        localStorage.setItem('access_token', res.access_token);
+        sessionStorage.setItem('access_token', res.access_token);
       });
   }
 
   logout() {
-    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
   }
 }

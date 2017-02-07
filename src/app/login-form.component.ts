@@ -6,22 +6,32 @@ import { UserService } from './user.service';
 @Component({
   selector: 'login-form',
   template: `
-    <form name="login" (ngSubmit)="tryToLogin()">
-      <input 
-        placeholder="email" 
-        name="email"
-        type="email"
-        required
-        [(ngModel)]="email"
-      >
-      <input 
-        placeholder="senha" 
-        name="password"
-        type="password"
-        required
-        [(ngModel)]="password"
-      >
-      <button type="submit">Entrar</button>
+    <form name="login" (ngSubmit)="tryToLogin()" #loginForm="ngForm">
+      <md-grid-list cols="1" rowHeight="100px">
+        <md-grid-tile>
+          <md-input-container>
+            <input 
+              md-input
+              placeholder="email" 
+              name="email"
+              type="email"
+              required
+              [(ngModel)]="email"
+            >
+          </md-input-container>
+          <md-input-container>
+            <input 
+              md-input
+              placeholder="senha" 
+              name="password"
+              type="password"
+              required
+              [(ngModel)]="password"
+            >
+          </md-input-container>
+          <button md-raised-button type="submit" [disabled]="!loginForm.form.valid">Entrar</button>
+        </md-grid-tile>
+      </md-grid-list>
     </form>
     `
     //templateUrl: './name.component.html',

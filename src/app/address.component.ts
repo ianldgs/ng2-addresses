@@ -7,7 +7,7 @@ import { Address } from './address';
 @Component({
   selector: 'address',
   template: `
-    <md-card style="width: 100%;">
+    <md-card>
       <md-card-header>
         <md-icon md-card-avatar class="example-header-image">place</md-icon>
         <md-card-title>{{address.label}}</md-card-title>
@@ -26,7 +26,6 @@ import { Address } from './address';
       </md-card-header>
       <md-card-content>
         <ng2-map 
-          *ngIf="address.latitude && address.longitude" 
           center="{{address.latitude}},{{address.longitude}}"
           style="height: 220px"
         ></ng2-map>
