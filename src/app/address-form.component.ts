@@ -13,9 +13,9 @@ import { Address } from './address';
   selector: 'address-form',
   template: `
     <md-card>
-    <md-card-content>
+    
     <div class="row">
-      <div class="col-xs-10 col-xs-offset-1">
+      <div class="col-xs-12">
         <ng2-map 
           *ngIf="address.latitude && address.longitude" 
           center="{{address.latitude}},{{address.longitude}}"
@@ -30,30 +30,34 @@ import { Address } from './address';
       <input name="id" [(ngModel)]="address.id" type="hidden">
 
       <div class="row">
-        <md-input-container class="col-xs-9 col-xs-offset-1">
-          <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
-        </md-input-container>
+        <div class="col-xs-12">
+          <md-input-container style="width: 100%;">
+            <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
+          </md-input-container>
+        </div>
       </div>
 
       <div class="row">
-        <md-input-container class="col-xs-9 col-xs-offset-1">
-          <input 
-            md-input
-            places-auto-complete
-            autocomplete="off"
-            placeholder="Endereço"
-            name="searchAddress"
-            [(ngModel)]="searchAddress"
-            (initialized$)="initialized($event)"
-            (place_changed)="placeChanged(place)"
-            [types]="['geocode']"
-          >
-        </md-input-container>
+        <div class="col-xs-12">
+          <md-input-container style="width: 100%;">
+            <input 
+              md-input
+              places-auto-complete
+              autocomplete="off"
+              placeholder="Endereço"
+              name="searchAddress"
+              [(ngModel)]="searchAddress"
+              (initialized$)="initialized($event)"
+              (place_changed)="placeChanged(place)"
+              [types]="['geocode']"
+            >
+          </md-input-container>
+        </div>
       </div>
 
       <div class="row">
 
-        <div class="col-xs-9 col-xs-offset-1">
+        <div class="col-xs-12">
   
           <md-input-container>
             <input 
@@ -103,42 +107,13 @@ import { Address } from './address';
       <input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="hidden">
 
       <div class="row">
-        <div class="col-xs-9 col-xs-offset-1">
+        <div class="col-xs-12">
           <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
         </div>
       </div>
-
-      <!--div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name"
-               required
-               [(ngModel)]="model.name" name="name"
-               #name="ngModel">
-        <div [hidden]="name.valid || name.pristine"
-             class="alert alert-danger">
-          Name is required
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="alterEgo">Alter Ego</label>
-        <input type="text" class="form-control" id="alterEgo"
-               [(ngModel)]="model.alterEgo" name="alterEgo">
-      </div>
-      <div class="form-group">
-        <label for="power">Hero Power</label>
-        <select class="form-control" id="power"
-                required
-                [(ngModel)]="model.power" name="power"
-                #power="ngModel">
-          <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
-        </select>
-        <div [hidden]="power.valid || power.pristine" class="alert alert-danger">
-          Power is required
-        </div>
-      </div-->
       
     </form>
-    </md-card-content>
+    
     </md-card>
   `,
   styles: ['']
@@ -234,18 +209,5 @@ export class AddressFormComponent implements OnInit {
     this.address.number = address.number;
     this.address.latitude = address.latitude;
     this.address.longitude = address.longitude;
-  }
-
-  googleByZipCode() {
-    this.addressService
-      .googleByZipCode(this.address.zipCode)
-      .then(address => {
-        this.address.country = address.country;
-        this.address.state = address.state;
-        this.address.city = address.city;
-        this.address.neighborhood = address.neighborhood;
-        this.address.latitude = address.latitude;
-        this.address.longitude = address.longitude;
-      });
   }
 }

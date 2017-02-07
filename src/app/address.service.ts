@@ -133,49 +133,4 @@ export class AddressService extends BaseService {
 
     return address;
   }
-
-  googleByZipCode(zipCode: string): Promise<Address> {
-    const search = new URLSearchParams();
-    search.set('address', zipCode);
-
-    return this.http
-      .get('http://maps.googleapis.com/maps/api/geocode/json', { search })
-      .toPromise()
-      .then(res => res.json())
-      .then(res => {
-        const address = new Address();
-        const place = res.results[0];
-
-        place.address_components.forEach((component: any) => {
-          if (component.types.indexOf('route') != -1) {
-            address.address = component.long_name;
-          }
-
-          if (component.types.indexOf('sublocality_level_1') != -1) {
-            address.neighborhood = component.long_name;
-          }
-
-          if (component.types.indexOf('administrative_area_level_2') != -1) {
-            address.city = component.long_name;
-          }
-
-          if (component.types.indexOf('administrative_area_level_1') != -1) {
-            address.state = component.long_name;
-          }
-
-          if (component.types.indexOf('country') != -1) {
-            address.country = component.long_name;
-          }
-
-          if (component.types.indexOf('postal_code') != -1) {
-            address.zipCode = component.long_name;
-          }
-        });
-
-        address.latitude = place.geometry.location.lat;
-        address.longitude = place.geometry.location.lng;
-
-        return address;
-      });
-  }
 }
