@@ -94,6 +94,46 @@ export class AddressService extends BaseService {
     });
   }
 
+  fromGooglePlace(place: any): Address {
+    const address = new Address();
+
+    place.address_components.forEach((component: any) => {
+      if (component.types.indexOf('street_number') != -1) {
+        address.number = +component.long_name;
+      }
+
+      if (component.types.indexOf('route') != -1) {
+        address.address = component.long_name;
+      }
+
+      if (component.types.indexOf('sublocality_level_1') != -1) {
+        address.neighborhood = component.long_name;
+      }
+
+      if (component.types.indexOf('administrative_area_level_2') != -1) {
+        address.city = component.long_name;
+      }
+
+      if (component.types.indexOf('administrative_area_level_1') != -1) {
+        address.state = component.long_name;
+      }
+
+      if (component.types.indexOf('country') != -1) {
+        address.country = component.long_name;
+      }
+
+      if (component.types.indexOf('postal_code') != -1) {
+        console.log(component);
+        address.zipCode = component.long_name;
+      }
+    });
+
+    address.latitude = place.geometry.location.lat();
+    address.longitude = place.geometry.location.lng();
+
+    return address;
+  }
+
   googleByZipCode(zipCode: string): Promise<Address> {
     const search = new URLSearchParams();
     search.set('address', zipCode);

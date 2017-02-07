@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { MdSnackBar } from '@angular/material';
 
 import 'rxjs/add/operator/switchMap';
 
+import { UserService } from './user.service';
 import { AddressService } from './address.service';
 import { Address } from './address';
 
@@ -20,9 +21,26 @@ import { Address } from './address';
     ></ng2-map>
     <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
       <input name="id" [(ngModel)]="address.id" type="hidden">
-      <md-input-container>
-        <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
-      </md-input-container>
+
+      <div class="row">
+        <md-input-container class="col-xs-11">
+          <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
+        </md-input-container>
+      </div>
+
+      <div class="row">
+        <md-input-container class="col-xs-11">
+          <input 
+            md-input
+            places-auto-complete
+            autocomplete="off"
+            placeholder="Endereço"
+            (initialized$)="initialized($event)"
+            (place_changed)="placeChanged(place)"
+            [types]="['geocode']"
+          >
+        </md-input-container>
+      </div>      
 
       <md-input-container>
         <input 
@@ -31,10 +49,8 @@ import { Address } from './address';
           name="zipCode" 
           placeholder="CEP" 
           [(ngModel)]="address.zipCode" 
-          type="number"
-          min="10000000"
-          max="99999999"
-          (ngModelChange)="address.zipCode && address.zipCode > 10000000 && googleByZipCode()"
+          type="text"
+          maxlength="9"
         >
       </md-input-container>
 
@@ -69,8 +85,11 @@ import { Address } from './address';
       <input id="txtLatitude" name="latitude" placeholder="Latitude" [(ngModel)]="address.latitude" type="hidden">
       <input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="hidden">
 
-      <button *ngIf="!address.id" md-button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
-      <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
+      <div class="row">
+        <div class="col-xs-11">
+          <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
+        </div>
+      </div>
 
       <!--div class="form-group">
         <label for="name">Name</label>
@@ -109,13 +128,16 @@ import { Address } from './address';
 })
 export class AddressFormComponent implements OnInit {
   address: Address;
+  autocomplete: google.maps.places.Autocomplete;
 
   constructor(
     private addressService: AddressService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private snackBar: MdSnackBar
+    private snackBar: MdSnackBar,
+    private ref: ChangeDetectorRef
   ) { }
 
   newAddress() {
@@ -124,6 +146,11 @@ export class AddressFormComponent implements OnInit {
 
   ngOnInit() {
     this.newAddress();
+
+    if (!this.userService.isLogged()) {
+      this.router.navigateByUrl('login');
+      return;
+    }
 
     this.route.params
       .switchMap((params: Params) => {
@@ -161,6 +188,33 @@ export class AddressFormComponent implements OnInit {
           duration: 2000,
         });
       });
+  }
+
+  initialized(autocomplete: any) {
+    this.autocomplete = autocomplete;
+  }
+
+  placeChanged() {
+    const place = this.autocomplete.getPlace();
+    console.log(place);
+    const address = this.addressService.fromGooglePlace(place);
+    console.log(address);
+
+    this.mergeAddress(address);
+
+    this.ref.detectChanges();
+  }
+
+  mergeAddress(address: Address) {
+    this.address.zipCode = address.zipCode;
+    this.address.country = address.country;
+    this.address.state = address.state;
+    this.address.city = address.city;
+    this.address.neighborhood = address.neighborhood;
+    this.address.address = address.address;
+    this.address.number = address.number;
+    this.address.latitude = address.latitude;
+    this.address.longitude = address.longitude;
   }
 
   googleByZipCode() {

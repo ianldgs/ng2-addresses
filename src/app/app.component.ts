@@ -18,7 +18,7 @@ import { Ng2MapComponent } from 'ng2-map';
 })
 export class AppComponent implements OnInit {
   constructor() {
-    Ng2MapComponent['apiUrl'] = 'https://maps.google.com/maps/api/js?key=AIzaSyBQ7MHSvEKfa3ZYpPtRImS1pksuo8EzdmQ';
+    Ng2MapComponent['apiUrl'] = 'https://maps.google.com/maps/api/js?libraries=visualization,places&key=AIzaSyBQ7MHSvEKfa3ZYpPtRImS1pksuo8EzdmQ';
   }
 
   ngOnInit() {
