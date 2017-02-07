@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MdSnackBar } from '@angular/material';
 
 import { UserService } from './user.service';
 
@@ -47,7 +48,11 @@ export class LoginFormComponent implements OnInit {
   email: string;
   password: string;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private snackBar: MdSnackBar
+  ) { }
 
   ngOnInit() {
     if (this.userService.isLogged()) {
@@ -61,7 +66,9 @@ export class LoginFormComponent implements OnInit {
       .then(() => {
         this.router.navigateByUrl('address');
       }, () => {
-        alert('Deu ruim');
+        this.snackBar.open('Usuário ou senha inválidos.', null, {
+          duration: 2000,
+        });
       });
   }
 }
