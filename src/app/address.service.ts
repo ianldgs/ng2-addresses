@@ -9,6 +9,7 @@ import { Address } from './address';
 @Injectable()
 export class AddressService extends BaseService {
   url = BASE_API_URL + BASE_API_PATH + '/address';
+  addresses: Address[] = [];
 
   constructor(private http: Http) {
     super();
@@ -42,7 +43,11 @@ export class AddressService extends BaseService {
     address.availableItems = address.availableItems || [];
 
     return this.http
-      .request(this.url + '/' + address.id, { headers, method: address.id ? 'PUT' : 'POST', body: address })
+      .request(this.url + (address.id ? '/' + address.id : ''), {
+        headers,
+        method: address.id ? 'PUT' : 'POST',
+        body: address
+      })
       .toPromise()
       .then(res => res.json());
   }
@@ -61,5 +66,15 @@ export class AddressService extends BaseService {
     return this.http
       .delete(this.url + '/' + id, { headers })
       .toPromise();
+  }
+
+  update(): Promise<Address[]> {
+    return this.all().then((addresses: Address[]) => {
+      this.addresses.length = 0;
+      addresses.reverse().forEach(address => {
+        this.addresses.push(address);
+      });
+      return this.addresses;
+    });
   }
 }

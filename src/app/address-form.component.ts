@@ -41,10 +41,10 @@ import { Address } from './address';
       <input id="txtComplement" name="complement" [(ngModel)]="address.complement" type="text"> 
 
       <label for="txtLatitude">Latitude</label>
-      <input id="txtLatitude" name="latitude" [(ngModel)]="address.latitude" type="number">
+      <input id="txtLatitude" name="latitude" [(ngModel)]="address.latitude" type="number" max="90" min="-90">
 
       <label for="txtLongitude">Longitude</label>
-      <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="number">
+      <input id="txtLongitude" name="longitude" [(ngModel)]="address.longitude" type="number" max="180" min="-180">
 
       <button type="submit" [disabled]="!addressForm.form.valid">Submit</button>
       <button type="button" (click)="newAddress(); addressForm.reset()">Cancelar</button>
@@ -119,7 +119,12 @@ export class AddressFormComponent implements OnInit {
     this.addressService
       .save(this.address)
       .then(res => {
-        this.router.navigate(['address']);
+        if ('/address' === this.router.url) {
+          this.newAddress();
+          this.addressService.update();
+        } else {
+          this.router.navigateByUrl('address');
+        }       
       }, () => {
         alert('Erro desconhecido');
       });

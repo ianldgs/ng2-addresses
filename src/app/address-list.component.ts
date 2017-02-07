@@ -33,6 +33,7 @@ export class AddressListComponent implements OnInit {
   }
 
   getAddresses(): void {
-    this.addressService.all().then(addresses => this.addresses = addresses);
+    this.addresses = this.addressService.addresses;
+    this.addressService.update();
   }
 }

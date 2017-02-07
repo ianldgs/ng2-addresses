@@ -33,7 +33,7 @@ export class AddressComponent {
       this.addressService
         .delete(id)
         .then(() => {
-          alert('Endereço removido com sucesso!');
+          this.addressService.update();
         }, () => {
           alert('Erro desconhecido');
         });
