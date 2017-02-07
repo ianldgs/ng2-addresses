@@ -68,7 +68,9 @@ export class AddressComponent {
             .then(() => {
               this.addressService.update();
             }, () => {
-              this.snackBar.open('Erro desconhecido.');
+              this.snackBar.open('Erro desconhecido.', null, {
+                duration: 2000,
+              });
             });
         }
       });
