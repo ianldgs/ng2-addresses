@@ -10,11 +10,13 @@ import { Address } from './address';
   template: `
     <address-form></address-form>
     <md-progress-bar mode="indeterminate" *ngIf="loading"></md-progress-bar>
-    <md-grid-list cols="4" *ngIf="!loading">
-      <md-grid-tile *ngFor="let address of addresses">
-        <address [address]="address"></address>
-      </md-grid-tile>
-    </md-grid-list>
+    <div  class="container-fluid">
+      <div class="row" *ngIf="!loading">
+        <div class="col-xs-12 col-sm-6 col-lg-4" *ngFor="let address of addresses" style="margin: 20px 0">
+          <address [address]="address"></address>
+        </div>
+      </div>
+    </div>
     <p *ngIf="!loading && addresses && !addresses.length">Nenhum endereço encontrado</p>
   `,
   styles: ['']
