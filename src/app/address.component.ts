@@ -16,7 +16,7 @@ import { Address } from './address';
         <button md-icon-button [mdMenuTriggerFor]="menu">
           <md-icon>more_vert</md-icon>
         </button>
-        <md-menu #menu="mdMenu">
+        <md-menu #menu="mdMenu" x-position="before">
           <a md-menu-item routerLink="/address/{{address.id}}/edit">
             <span>Editar</span>
           </a>
