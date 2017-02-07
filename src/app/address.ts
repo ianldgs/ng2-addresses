@@ -11,5 +11,5 @@ export class Address {
   neighborhood?: string;
   number?: number;
   country: string;
-  availableItems: number[];
+  availableItems?: number[];
 }
