@@ -190,9 +190,7 @@ export class AddressFormComponent implements OnInit {
 
   placeChanged() {
     const place = this.autocomplete.getPlace();
-    console.log(place);
     const address = this.addressService.fromGooglePlace(place);
-    console.log(address);
 
     this.mergeAddress(address);
 
