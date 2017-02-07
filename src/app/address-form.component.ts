@@ -108,7 +108,7 @@ import { Address } from './address';
 
       <div class="row">
         <div class="col-xs-12">
-          <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
+          <button md-raised-button type="submit" [disabled]="!address.latitude || !address.longitude">Salvar</button>
         </div>
       </div>
       
