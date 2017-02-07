@@ -14,79 +14,96 @@ import { Address } from './address';
   template: `
     <md-card>
     <md-card-content>
-    <ng2-map 
-      *ngIf="address.latitude && address.longitude" 
-      center="{{address.latitude}},{{address.longitude}}"
-      style="padding-bottom: 20px;"
-    ></ng2-map>
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1">
+        <ng2-map 
+          *ngIf="address.latitude && address.longitude" 
+          center="{{address.latitude}},{{address.longitude}}"
+          style="padding-bottom: 20px;"
+        >
+          <marker position="{{address.latitude}},{{address.longitude}}"></marker>
+        </ng2-map>
+      </div>
+    </div>
+    
     <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
       <input name="id" [(ngModel)]="address.id" type="hidden">
 
       <div class="row">
-        <md-input-container class="col-xs-11">
+        <md-input-container class="col-xs-9 col-xs-offset-1">
           <input md-input id="txtLabel" name="label" placeholder="Nome" [(ngModel)]="address.label" type="text">
         </md-input-container>
       </div>
 
       <div class="row">
-        <md-input-container class="col-xs-11">
+        <md-input-container class="col-xs-9 col-xs-offset-1">
           <input 
             md-input
             places-auto-complete
             autocomplete="off"
             placeholder="Endereço"
+            name="searchAddress"
+            [(ngModel)]="searchAddress"
             (initialized$)="initialized($event)"
             (place_changed)="placeChanged(place)"
             [types]="['geocode']"
           >
         </md-input-container>
-      </div>      
+      </div>
 
-      <md-input-container>
-        <input 
-          md-input 
-          id="txtZipCode" 
-          name="zipCode" 
-          placeholder="CEP" 
-          [(ngModel)]="address.zipCode" 
-          type="text"
-          maxlength="9"
-        >
-      </md-input-container>
+      <div class="row">
 
-      <md-input-container>
-        <input md-input id="txtCountry" name="country" placeholder="País" [(ngModel)]="address.country" type="text">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtState" name="state" placeholder="Estado" [(ngModel)]="address.state" type="text">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtCity" name="city" placeholder="Cidade" [(ngModel)]="address.city" type="text">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtNeighborhood" name="neighborhood" placeholder="Bairro" [(ngModel)]="address.neighborhood" type="text">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtAddress" name="address" placeholder="Rua" [(ngModel)]="address.address" type="text">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtNumber" name="number" placeholder="Número" [(ngModel)]="address.number" type="number">
-      </md-input-container>
-
-      <md-input-container>
-        <input md-input id="txtComplement" name="complement" placeholder="Complemento" [(ngModel)]="address.complement" type="text"> 
-      </md-input-container>
+        <div class="col-xs-9 col-xs-offset-1">
+  
+          <md-input-container>
+            <input 
+              md-input 
+              id="txtZipCode" 
+              name="zipCode" 
+              placeholder="CEP" 
+              [(ngModel)]="address.zipCode"
+              type="text"
+              maxlength="9"
+            >
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtCountry" name="country" placeholder="País" [(ngModel)]="address.country" type="text">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtState" name="state" placeholder="Estado" [(ngModel)]="address.state" type="text">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtCity" name="city" placeholder="Cidade" [(ngModel)]="address.city" type="text">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtNeighborhood" name="neighborhood" placeholder="Bairro" [(ngModel)]="address.neighborhood" type="text">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtAddress" name="address" placeholder="Rua" [(ngModel)]="address.address" type="text">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtNumber" name="number" placeholder="Número" [(ngModel)]="address.number" type="number">
+          </md-input-container>
+    
+          <md-input-container>
+            <input md-input id="txtComplement" name="complement" placeholder="Complemento" [(ngModel)]="address.complement" type="text"> 
+          </md-input-container>
+  
+        </div>
+  
+      </div>
 
       <input id="txtLatitude" name="latitude" placeholder="Latitude" [(ngModel)]="address.latitude" type="hidden">
       <input id="txtLongitude" name="longitude" placeholder="Longitude" [(ngModel)]="address.longitude" type="hidden">
 
       <div class="row">
-        <div class="col-xs-11">
+        <div class="col-xs-9 col-xs-offset-1">
           <button md-raised-button type="submit" [disabled]="!addressForm.form.valid">Salvar</button>
         </div>
       </div>
@@ -129,6 +146,7 @@ import { Address } from './address';
 export class AddressFormComponent implements OnInit {
   address: Address;
   autocomplete: google.maps.places.Autocomplete;
+  searchAddress: string;
 
   constructor(
     private addressService: AddressService,
@@ -142,6 +160,7 @@ export class AddressFormComponent implements OnInit {
 
   newAddress() {
     this.address = new Address();
+    this.searchAddress = '';
   }
 
   ngOnInit() {
