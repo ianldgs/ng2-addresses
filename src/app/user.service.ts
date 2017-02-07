@@ -10,6 +10,7 @@ export class UserService extends BaseService {
 
   constructor(private http: Http) {
     super();
+    this.state.isLogged = !!sessionStorage.getItem('access_token');
   }
 
   isLogged(): boolean {
