@@ -6,12 +6,14 @@ import { BASE_API_URL, BaseService } from './base.service';
 
 @Injectable()
 export class UserService extends BaseService {
+  state: any = {};
+
   constructor(private http: Http) {
     super();
   }
 
   isLogged(): boolean {
-    return !!sessionStorage.getItem('access_token');
+    return this.state.isLogged;
   }
 
   login(email: string, password: string): Promise<any> {
@@ -28,11 +30,13 @@ export class UserService extends BaseService {
       .toPromise()
       .then(res => res.json())
       .then(res => {
+        this.state.isLogged = true;
         sessionStorage.setItem('access_token', res.access_token);
       });
   }
 
   logout() {
+    this.state.isLogged = false;
     sessionStorage.removeItem('access_token');
   }
 }
